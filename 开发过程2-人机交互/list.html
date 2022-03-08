@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title></title>
+  <script src="http://libs.baidu.com/jquery/2.0.0/jquery.min.js"></script>
+</head>
+<body>
+  <table>
+    <thead>
+      <tr>
+        <td>平台</td>
+        <td>product_ident</td>
+        <td>product_key</td>
+        <td>connection_domain</td>
+      </tr>
+    </thead>
+    <tbody id="table-data"></tbody>
+  </table>
+  <label>平台</label>
+  <input id="product_ident" name="" />
+  <label>域名</label>
+  <input id="product_key" name="" />
+  <label>域名2</label>
+  <input id="connection_domain" name="" />
+  <label>平台12</label>
+  <select id="platform">
+    <option value="wiwide" >
+      maiwaidi
+    </option>
+    <option value="naixue" >
+      naixue
+    </option>
+    <option value="naixue1" >
+      naixue1
+    </option>
+    <option value="naixue2" >
+      naixue2
+    </option>
+    <option value="naixue3" >
+      naixue3
+    </option>
+  </select>
+  <button id="save">保存</button>
+</body>
+
+<script>
+/**
+ * 前端开发
+ * 1、人机交互，事件监听
+ * 2、DOM操作，增、删、改、查
+ */
+/**
+ * 1、操作：选中下拉框的值，然后动态设置其它输入框的值
+ * 2、操作——事件
+ * 3、下拉框的值——数据，数组
+ * 4、输入框的值——需要一个变量存起来
+ */
+$(document).ready(function(){
+   // 表格展示的配置信息
+  var configList = [{
+    platform: 'wiwide',
+    product_ident: 'product_ident1',
+    product_key: 'product_key1',
+    connection_domain: '1111111111111'
+  }, {
+    platform: 'naixue',
+    product_ident: 'product_ident2',
+    product_key: 'product_key2',
+    connection_domain: 'connection_domain2'
+  }, {
+    platform: 'naixue1',
+    product_ident: 'product_ident21',
+    product_key: 'product_key21',
+    connection_domain: 'connection_domain21'
+  }, {
+    platform: 'naixue2',
+    product_ident: 'product_ident22',
+    product_key: 'product_key23',
+    connection_domain: 'connection_domain24'
+  }, {
+    platform: 'naixue3',
+    product_ident: 'product_ident24',
+    product_key: 'product_key24',
+    connection_domain: 'connection_domain24'
+  }];
+  
+  /**
+   * 初始化表格
+   */
+  function initTable(configList) {
+    var trString = '';
+    configList.forEach(function (item) {
+      trString += `<tr>
+        <td class="platform-td">${item.platform}</td>
+        <td>${item.product_ident}</td>
+        <td>${item.product_key}</td>
+        <td>${item.connection_domain}</td>
+      </tr>`
+    });
+    $('#table-data').empty();
+    $('#table-data').append(trString);
+  }
+  
+  /**
+   * 根据platform 查找数据
+   */
+  function getConfigByPlatform(platform) {
+    var config = null;
+    configList.forEach(function(item) {
+      if (item.platform === platform) {
+        config = item;
+      }
+    })
+    return config;
+  }
+  
+  /**
+   * 初始化表单
+   */
+  function initForm(config) {
+    $('#platform').val(config.platform);
+    $('#product_ident').val(config.product_ident);
+    $('#product_key').val(config.product_key);
+    $('#connection_domain').val(config.connection_domain);
+  }
+  
+  /**
+   * 获取表单数据
+   */
+  function getConfigByForm() {
+    return {
+      platform: $('#platform').val(),
+      product_ident: $('#product_ident').val(),
+      product_key: $('#product_key').val(),
+      connection_domain: $('#connection_domain').val()
+    }
+  }
+  /**
+   * 点击事件初始化表单
+   */
+  $(document).on('click', '.platform-td', function() {
+    var config = getConfigByPlatform($(this).text());
+    initForm(config);
+  });
+  
+  /**
+   * 点击应用按钮保存数据
+   * 1、从表单上获取值
+   * 2、保存数据 保存到数组里面 根据选择的下拉框判断保存对应的值
+   * 
+   */
+  $('#save').click(function(){
+    var config = getConfigByForm();
+    configList.forEach(function(item) {
+      if (item.platform === config.platform) {
+        item.platform = config.platform
+        item.product_ident = config.product_ident
+        item.product_key = config.product_key
+        item.connection_domain = config.connection_domain
+      }
+    });
+    initTable(configList);
+  });
+  
+  initTable(configList);
+});
+</script>
+</html>

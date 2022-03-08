@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <script src="./prototype.js" type="text/javascript" charset="utf-8"></script>
+    <title></title>
+  </head>
+  <body>
+    <ul id="auth_mul_1" style="z-index: 999;" class="auth_mul_1">
+      <li>
+        <label for="checkbox-01" class="label-check chk_box_1" id="l-1_1" onclick="setupCheck(this,1)">
+          <input type="checkbox" class="chk_input_1" id="checkbox-1_1" name="checkbox" value="4">
+          视频终端
+        </label>
+      </li>
+      <li>
+        <label for="checkbox-01" class="label-check chk_box_1" id="l-1_2" onclick="setupCheck(this,1)">
+          <input type="checkbox" class="chk_input_1" id="checkbox-1_2" name="checkbox" value="0">
+          其他终端
+        </label>
+      </li>
+      <li>
+        <label for="checkbox-01" class="label-check chk_box_1" id="l-1_3" onclick="setupCheck(this,1)">
+          <input type="checkbox" class="chk_input_1" id="checkbox-1_3" name="checkbox" value="1">
+          windows
+        </label>
+      </li>
+      <li>
+        <label for="checkbox-01" class="label-check chk_box_1" id="l-1_4" onclick="setupCheck(this,1)">
+          <input type="checkbox" class="chk_input_1" id="checkbox-1_4" name="checkbox" value="2">
+          安卓终端
+        </label>
+      </li>
+      <li>
+        <label for="checkbox-01" class="label-check chk_box_1" id="l-1_5" onclick="setupCheck(this,1)">
+          <input type="checkbox" class="chk_input_1" id="checkbox-1_5" name="checkbox" value="3">
+          IOS终端
+     		 </label>
+      </li>
+      <li>
+        <label for="checkbox-01" class="label-check chk_box_1" id="l-1_6" onclick="setupCheck(this,1)">
+          <input type="checkbox" class="chk_input_1" id="checkbox-1_6" name="checkbox" value="5">
+          网络设备
+        </label>
+      </li>
+      <li>
+        <label for="checkbox-01" class="label-check chk_box_1" id="l-1_7" onclick="setupCheck(this,1)">
+          <input type="checkbox" class="chk_input_1" id="checkbox-1_7" name="checkbox" value="6">
+          linux
+        </label>
+      </li>
+      <li>
+        <label for="checkbox-01" class="label-check chk_box_1" id="l-1_8" onclick="setupCheck(this,1)">
+          <input type="checkbox" class="chk_input_1" id="checkbox-1_4" name="checkbox" value="7">
+          NVR
+        </label>
+      </li>
+     	<li>
+        <label for="checkbox-01" class="label-check chk_box_1" id="l-1_9" onclick="setupCheck(this,1)">
+          <input type="checkbox" class="chk_input_1" id="checkbox-1_9" name="checkbox" value="7">
+          所有
+        </label>
+      </li>
+    </ul>
+    <script>
+      Event.observe(window, 'load', function() {
+      });
+      function setupCheck(obj, eq) {
+        console.log(obj.children[0].checked);
+        var checkList = $$('.chk_box_' + eq);
+        var checkInputList = $$('.chk_input_' + eq);
+        var checkValue = checkInputList[checkInputList.length - 1].checked;
+        if (obj.id === checkList[checkList.length - 1].id) {
+          checkInputList.forEach(function (item) {
+            item.checked = checkValue;
+            if (checkValue) {
+              obj.removeClassName("label-check");
+              obj.addClassName("check-checked");
+            } else {
+              obj.removeClassName("check-checked");
+              obj.addClassName("label-check");
+            }
+          });
+        } else {
+          var isAll = true;
+          checkInputList.forEach(function (item, index) {
+            if (!item.checked && index <= checkInputList.length - 2) {
+              isAll = false;
+            }
+          });
+          if (isAll) {
+            checkInputList[checkInputList.length - 1].checked = true;
+            checkInputList[checkInputList.length - 1].removeClassName("label-check");
+            checkInputList[checkInputList.length - 1].addClassName("check-checked");
+          } else {
+            checkInputList[checkInputList.length - 1].checked = false;
+            checkInputList[checkInputList.length - 1].removeClassName("check-checked");
+            checkInputList[checkInputList.length - 1].addClassName("label-check");
+          }
+        }
+      }
+    </script>
+  </body>
+</html>

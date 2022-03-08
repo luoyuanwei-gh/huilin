@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title></title>
+  <script src="http://libs.baidu.com/jquery/2.0.0/jquery.min.js"></script>
+  <style>
+    td {
+      border: 1px solid #ddd;
+    }
+  </style>
+</head>
+<body>
+  <table>
+    <thead>
+      <tr>
+        <td>平台</td>
+        <td>product_ident</td>
+        <td>product_key</td>
+        <td>connection_domain</td>
+      </tr>
+    </thead>
+    <tbody id="table-data"></tbody>
+  </table>
+  <button id="search">查询</button>
+</body>
+
+<script>
+/**
+ * 前端开发
+ * 1、人机交互，事件监听
+ * 2、DOM操作，增、删、改、查
+ * 3、前后台交互，ajax
+ *   3.1、url地址: http://localhost:3000/getConfigList
+ *   3.2、请求的方式: get
+ *   3.3、请求参数: 无
+ *   3.4、处理请求结果  { status: 200, data: [] }
+ *      3.4.1、成功 请求成功，且查询结果符合预期，一切正常
+ *             处理方式是成功回调函数
+ * 
+ *      3.4.2、失败 请求成功，但结果不符合预期
+ *             处理方式是成功回调函数
+ * 
+ *      3.4.3、异常 网络异常
+ *             错误回调函数，或者try...catch...语句处理
+ * 4、页面和页面之间的交互 参数的传递和接收
+ */
+$(document).ready(function(){
+  /**
+   * 案例：查询数据并用表格展示出来，点击表格数据，打开新的详情页面，并对详情页做初始化。
+   *      在详情页面编辑数据保存，并更新表格的信息。
+   * 1、操作：选中下拉框的值，然后动态设置其它输入框的值
+   * 2、操作——事件
+   * 3、下拉框的值——数据，数组
+   * 4、输入框的值——需要一个变量存起来
+   */
+  
+  var configList = []; // 表格展示的配置信息
+  
+  /**
+   * 查询表格数据
+   */
+  function searchConfigList () {
+    $.ajax({
+      url: "http://localhost:3000/getConfigList",
+      method: 'get',
+      success: function(res) {
+        configList = res.data;
+        initTable(configList);
+      },
+      error: function (err) {
+        alert('网络异常！请尽快联系管理员。');
+      }
+    });
+  }
+  
+  /**
+   * 初始化表格
+   */
+  function initTable(configList) {
+    var trString = '';
+    configList.forEach(function (item) {
+      trString += `<tr>
+        <td class="platform-td">${item.platform}</td>
+        <td>${item.product_ident}</td>
+        <td>${item.product_key}</td>
+        <td>${item.connection_domain}</td>
+      </tr>`
+    });
+    $('#table-data').empty();
+    $('#table-data').append(trString);
+  }
+  
+  /**
+   * 点击进入详情页面
+   */
+  $(document).on('click', '.platform-td', function() {
+    window.location.href = `./detail.html?platform=${$(this).text()}`;
+  });
+  
+  /**
+   * 查询按钮点击事件
+   */
+  $('#search').click(function () {
+    searchConfigList();
+  });
+  
+  searchConfigList();
+});
+</script>
+</html>

@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title></title>
+  <script src="http://libs.baidu.com/jquery/2.0.0/jquery.min.js"></script>
+</head>
+<body>
+  <label>product_ident</label>
+  <input id="product_ident" name="" />
+  
+  <label>product_key</label>
+  <input id="product_key" name="" />
+  
+  <label>connection_domain</label>
+  <input id="connection_domain" name="" />
+  
+  <label>platform</label>
+  <select id="platform">
+    <option value="wiwide" >
+      maiwaidi
+    </option>
+    <option value="naixue" >
+      naixue
+    </option>
+    <option value="naixue1" >
+      naixue1
+    </option>
+    <option value="naixue2" >
+      naixue2
+    </option>
+    <option value="naixue3" >
+      naixue3
+    </option>
+  </select>
+  <button id="save">保存</button>
+</body>
+
+<script>
+/**
+ * 前端开发
+ * 1、人机交互，事件监听
+ * 2、DOM操作，增、删、改、查
+ * 3、前后台交互，ajax
+ *   3.1、url地址: http://localhost:3000/getConfigList
+ *   3.2、请求的方式: get
+ *   3.3、请求参数: 无
+ *   3.4、处理请求结果  { status: 200, data: [] }
+ *      3.4.1、成功
+ *      3.4.2、失败
+ *      3.4.3、异常
+ * 4、页面和页面之间的交互 参数的传递和接收
+ */
+$(document).ready(function(){
+  
+  var config = null; // 配置信息
+  
+  /**
+   * 根据参数名称，从url中获取参数
+   * @param {Object} name
+   */
+  function getUrlParam(name) {
+    var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)"); //构造一个含有目标参数的正则表达式对象
+    var r = window.location.search.substr(1).match(reg); //匹配目标参数
+    if (r != null) {
+     return unescape(r[2]);
+    }
+    return null; //返回参数值
+  }
+  
+  /**
+   * 根据platform 查询config 配置信息
+   * @param {Object} platform
+   */
+  function searchConfigByPlatform (platform) {
+    $.ajax({
+      url: "http://localhost:3000/searchConfigByPlatform",
+      method: 'get',
+      data: {
+        platform: platform
+      },
+      success: function(res) {
+        config = res.data;
+        initForm(config);
+      },
+      error: function (err) {
+        alert('网络异常！请尽快联系管理员。');
+      }
+    });
+  }
+  
+  /**
+   * 初始化表单
+   */
+  function initForm(config) {
+    $('#platform').val(config.platform);
+    $('#product_ident').val(config.product_ident);
+    $('#product_key').val(config.product_key);
+    $('#connection_domain').val(config.connection_domain);
+  }
+  
+  /**
+   * 获取表单数据
+   */
+  function getConfigByForm() {
+    return {
+      platform: $('#platform').val(),
+      product_ident: $('#product_ident').val(),
+      product_key: $('#product_key').val(),
+      connection_domain: $('#connection_domain').val()
+    }
+  }
+  
+  /**
+   * 点击应用按钮保存数据
+   * 1、从表单上获取值
+   * 2、保存数据 保存到数组里面 根据选择的下拉框判断保存对应的值
+   * 
+   */
+  $('#save').click(function(){
+    $.ajax({
+      url: "http://localhost:3000/saveConfig",
+      method: 'post',
+      data: getConfigByForm(),
+      success: function(res) {
+        if (res.code === 1) { // 操作成功
+          window.location.href = `./list.html`;
+        } else { // 操作失败
+          alert(res.message);
+        }
+      },
+      error: function (err) {
+        alert('网络异常！请尽快联系管理员。');
+      }
+    });
+  });
+  
+  searchConfigByPlatform(getUrlParam('platform'));
+});
+</script>
+</html>
